@@ -8,7 +8,10 @@ use_ok 'Test::Apache2::Server';
 my $server = Test::Apache2::Server->new;
 ok($server, 'new');
 
-$server->location('/foo', 't::FooHandler');
+$server->location('/foo', {
+    PerlResponseHandler => 't::FooHandler',
+    PerlSetVar          => [ Key => 'Value' ],
+});
 
 my $resp = $server->get('/foo');
 isa_ok($resp, 'HTTP::Response');

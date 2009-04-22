@@ -21,11 +21,11 @@ sub new {
 }
 
 sub location {
-    my ($self, $path, $handler, $config_ref) = @_;
+    my ($self, $path, $config_ref) = @_;
 
     unshift @{ $self->{handlers} }, {
         path    => $path,
-        handler => $handler,
+        handler => $config_ref->{PerlResponseHandler},
         config  => $config_ref
     };
 }
