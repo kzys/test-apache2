@@ -3,11 +3,15 @@ use strict;
 use warnings;
 use base qw(Class::Accessor::Fast);
 
-use Test::Apache2::Table;
 use URI;
+use APR::Pool;
+use APR::Table;
 
 __PACKAGE__->mk_accessors(
     qw(path_info method status response_body uri content_type location unparsed_uri headers_in)
+);
+__PACKAGE__->mk_ro_accessors(
+    qw(headers_out err_headers_out)
 );
 
 sub new {
@@ -15,6 +19,10 @@ sub new {
 
     my $self = $class->SUPER::new(@args);
     $self->uri(URI->new($self->uri));
+
+    my $pool = APR::Pool->new;
+    $self->{headers_out} = APR::Table::make($pool, 0);
+    $self->{err_headers_out} = APR::Table::make($pool, 0);
 
     return $self;
 }
@@ -40,6 +48,8 @@ sub header_in {
 }
 
 sub header_out {
+    my ($self, $key, $value) = @_;
+    return $self->headers_out->set($key, $value);
 }
 
 sub send_http_header {
@@ -67,10 +77,6 @@ sub args {
     my ($self) = @_;
 
     return $self->uri->query;
-}
-
-sub err_headers_out {
-    Test::Apache2::Table->new;
 }
 
 sub set_content_length {

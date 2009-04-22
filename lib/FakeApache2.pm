@@ -17,7 +17,6 @@ use HTTP::Request;
 use HTTP::Response;
 use Class::Accessor;
 use base qw(Class::Accessor);
-use FakeApache2::Headers;
 
 sub new {
     my ($class, $req) = @_;
@@ -45,18 +44,6 @@ sub header_in {
 sub headers_in {
     my ($self) = @_;
     $self->{_request}->headers;
-}
-
-sub header_out {
-    my ($self, $key, $value) = @_;
-    $self->{_response}->header($key => $value);
-}
-
-sub headers_out {
-    my ($self) = @_;
-    FakeApache2::Headers->new(
-        $self->{_response}->headers
-    );
 }
 
 sub send_http_header {
