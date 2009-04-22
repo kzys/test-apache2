@@ -1,4 +1,4 @@
-package Test::Apache2::Request;
+package Test::Apache2::RequestRec;
 use strict;
 use warnings;
 use base qw(Class::Accessor::Fast);

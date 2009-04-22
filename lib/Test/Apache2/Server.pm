@@ -4,7 +4,7 @@ use warnings;
 use base qw(Class::Accessor::Fast);
 __PACKAGE__->mk_accessors(qw(host));
 
-use Test::Apache2::Request;
+use Test::Apache2::RequestRec;
 use HTTP::Response;
 
 sub new {
@@ -37,7 +37,7 @@ sub request {
 	$_ => $http_request->header($_);
     } $http_request->header_field_names;
 
-    my $req = Test::Apache2::Request->new({
+    my $req = Test::Apache2::RequestRec->new({
         method => $http_request->method, uri => $http_request->uri,
 	headers_in => \%headers_in
     });
@@ -47,7 +47,7 @@ sub request {
 sub get {
     my ($self, $path) = @_;
 
-    my $req = Test::Apache2::Request->new({
+    my $req = Test::Apache2::RequestRec->new({
         method => 'GET', uri => 'http://' . $self->host . $path,
 	headers_in => {}
     });
