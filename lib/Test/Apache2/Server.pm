@@ -71,7 +71,17 @@ sub _request {
 
     my ($class, $config) = $self->_select($req->path);
     $req->dir_config($config);
-    my $handler = $class->handler($req);
+
+    my $buffer;
+    {
+        local *STDOUT;
+        open STDOUT, '>', \$buffer;
+        $class->handler($req);
+    }
+
+    if ($buffer) {
+        $req->print($buffer);
+    }
 
     my $result = HTTP::Response->new;
     $result->header('Content-Type', $req->content_type);

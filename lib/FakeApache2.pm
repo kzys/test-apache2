@@ -73,11 +73,6 @@ sub content_type {
     $self->header_out('Content-Type' => $type);
 }
 
-sub method {
-    my ($self) = @_;
-    $self->{_request}->method;
-}
-
 sub response {
     my ($self) = @_;
 
