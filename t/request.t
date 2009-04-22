@@ -1,28 +1,17 @@
 use strict;
 use warnings;
-use Test::More tests => 2;
+use Test::More tests => 1;
+use t::Util;
+use Apache2::Const -compile => qw(OK);
 
-use_ok 'Test::Apache2::Server';
-
-{
-    package Handler;
-    use Apache2::Const -compile => qw(OK);
-
-    sub handler {
+server_with_handler(
+    sub {
         my ($self, $req) = @_;
 
-        Test::More::is($req->method, 'GET', 'method');
+        is($req->method, 'GET', 'method');
 
         $req->content_type('text/plain');
         print "mod_perl 2.0 rocks!\n";
         return Apache2::Const::OK;
     }
-}
-
-my $server = Test::Apache2::Server->new;
-
-$server->location('/foo', {
-    PerlResponseHandler => 'Handler',
-});
-
-my $resp = $server->get('/foo');
+)->get('/handler');
