@@ -84,7 +84,7 @@ sub _request {
     }
 
     my $result = HTTP::Response->new;
-    $result->header('Content-Type', $req->content_type);
+    $result->header('Content-Type', $req->headers_out->get('Content-Type'));
     $result->code($req->status);
     $result->content($req->response_body);
     return $result;

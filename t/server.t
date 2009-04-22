@@ -1,6 +1,6 @@
 use strict;
 use warnings;
-use Test::More tests => 5;
+use Test::More tests => 4;
 use t::FooHandler;
 
 use_ok 'Test::Apache2::Server';
@@ -15,11 +15,6 @@ $server->location('/foo', {
 
 my $resp = $server->get('/foo');
 isa_ok($resp, 'HTTP::Response');
-is(
-    $resp->header('Content-Type'),
-    'text/plain',
-    'Content-Type'
-);
 is(
     $resp->content,
     'hello world',

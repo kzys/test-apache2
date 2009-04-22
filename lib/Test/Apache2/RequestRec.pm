@@ -8,7 +8,7 @@ use APR::Pool;
 use APR::Table;
 
 __PACKAGE__->mk_accessors(
-    qw(path_info status response_body uri content_type location unparsed_uri headers_in)
+    qw(path_info status response_body uri location unparsed_uri headers_in)
 );
 __PACKAGE__->mk_ro_accessors(
     qw(headers_out err_headers_out method)
@@ -50,6 +50,11 @@ sub header_in {
 sub header_out {
     my ($self, $key, $value) = @_;
     return $self->headers_out->set($key, $value);
+}
+
+sub content_type {
+    my ($self, $type) = @_;
+    $self->headers_out->set('Content-Type', $type);
 }
 
 sub send_http_header {

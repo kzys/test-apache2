@@ -67,12 +67,6 @@ sub status {
     }
 }
 
-sub content_type {
-    my ($self, $type) = @_;
-
-    $self->header_out('Content-Type' => $type);
-}
-
 sub response {
     my ($self) = @_;
 
