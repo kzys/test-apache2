@@ -2,6 +2,9 @@ package Test::Apache2;
 use strict;
 use warnings;
 
+use vars qw($VERSION);
+$VERSION = '0.01';
+
 use Test::Apache2::Server;
 
 sub import {
