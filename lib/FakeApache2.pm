@@ -50,9 +50,6 @@ sub send_http_header {
     ;
 }
 
-sub subprocess_env {
-}
-
 sub location {
 }
 

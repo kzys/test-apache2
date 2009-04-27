@@ -23,6 +23,7 @@ sub new {
     my $pool = APR::Pool->new;
     $self->{headers_out} = APR::Table::make($pool, 0);
     $self->{err_headers_out} = APR::Table::make($pool, 0);
+    $self->{subprocess_env} = APR::Table::make($pool, 0);
 
     return $self;
 }
@@ -61,6 +62,15 @@ sub send_http_header {
 }
 
 sub subprocess_env {
+    my ($self, $key, $value) = @_;
+
+    if ($value) {
+        $self->subprocess_env->set($key, $value);
+    } elsif ($key) {
+        $self->subprocess_env->get($key);
+    } else {
+        $self->{subprocess_env};
+    }
 }
 
 sub dir_config {
