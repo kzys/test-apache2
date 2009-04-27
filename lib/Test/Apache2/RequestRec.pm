@@ -8,7 +8,7 @@ use APR::Pool;
 use APR::Table;
 
 __PACKAGE__->mk_accessors(
-    qw(path_info status response_body uri location unparsed_uri)
+    qw(status response_body uri location unparsed_uri)
 );
 __PACKAGE__->mk_ro_accessors(
     qw(headers_in headers_out err_headers_out method)
@@ -42,6 +42,11 @@ sub get_server_port {
 sub hostname {
     my ($self) = @_;
     $self->uri->host;
+}
+
+sub path_info {
+    my ($self) = @_;
+    $self->path; # really?
 }
 
 sub path {

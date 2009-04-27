@@ -31,18 +31,6 @@ sub new {
     return $self;
 }
 
-sub path_info {
-    my ($self) = @_;
-    $self->{_request}->uri->path;
-}
-
-sub send_http_header {
-    ;
-}
-
-sub location {
-}
-
 sub response {
     my ($self) = @_;
 
