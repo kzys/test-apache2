@@ -34,12 +34,12 @@ sub request {
     my ($self, $http_request) = @_;
 
     my %headers_in = map {
-	$_ => $http_request->header($_);
+        $_ => $http_request->header($_);
     } $http_request->header_field_names;
 
     my $req = Test::Apache2::RequestRec->new({
         method => $http_request->method, uri => $http_request->uri,
-	headers_in => \%headers_in
+        headers_in => \%headers_in
     });
     $self->_request($req);
 }

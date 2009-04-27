@@ -1,10 +1,14 @@
 use strict;
 use warnings;
-use Test::More tests => 4;
+use Test::More tests => 7;
 
 use_ok 'Test::Apache2::RequestRec';
 
-my $req = Test::Apache2::RequestRec->new;
+my $req = Test::Apache2::RequestRec->new({ headers_in => { 'X-Baz' => 'hello' } });
+isa_ok($req->headers_in, 'APR::Table');
+is($req->headers_in->get('X-Baz'), 'hello', 'headers_in');
+is($req->header_in('X-Baz'), 'hello', 'header_in');
+
 ok($req->headers_out, 'headers_out');
 
 $req->headers_out->set('X-FooBar' => 'One');

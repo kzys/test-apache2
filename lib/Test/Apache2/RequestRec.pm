@@ -8,10 +8,10 @@ use APR::Pool;
 use APR::Table;
 
 __PACKAGE__->mk_accessors(
-    qw(path_info status response_body uri location unparsed_uri headers_in)
+    qw(path_info status response_body uri location unparsed_uri)
 );
 __PACKAGE__->mk_ro_accessors(
-    qw(headers_out err_headers_out method)
+    qw(headers_in headers_out err_headers_out method)
 );
 
 sub new {
@@ -21,9 +21,15 @@ sub new {
     $self->uri(URI->new($self->uri));
 
     my $pool = APR::Pool->new;
-    $self->{headers_out} = APR::Table::make($pool, 0);
-    $self->{err_headers_out} = APR::Table::make($pool, 0);
-    $self->{subprocess_env} = APR::Table::make($pool, 0);
+    map {
+        $self->{ $_ } = APR::Table::make($pool, 0);
+    } qw(headers_out err_headers_out subprocess_env);
+
+    my $headers_in = APR::Table::make($pool, 0);
+    while (my ($key, $value) = each %{ $self->{headers_in} }) {
+        $headers_in->set($key => $value);
+    }
+    $self->{headers_in} = $headers_in;
 
     return $self;
 }
@@ -45,7 +51,7 @@ sub path {
 
 sub header_in {
     my ($self, $key) = @_;
-    return $self->headers_in->{ $key };
+    return $self->headers_in->get($key);
 }
 
 sub header_out {

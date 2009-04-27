@@ -36,16 +36,6 @@ sub path_info {
     $self->{_request}->uri->path;
 }
 
-sub header_in {
-    my ($self, $key) = @_;
-    $self->{_request}->header($key);
-}
-
-sub headers_in {
-    my ($self) = @_;
-    $self->{_request}->headers;
-}
-
 sub send_http_header {
     ;
 }
