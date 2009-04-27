@@ -56,17 +56,6 @@ sub subprocess_env {
 sub location {
 }
 
-sub status {
-    my ($self, $status) = @_;
-
-    my $resp = $self->{_response};
-    if ($status) {
-        $resp->code($status);
-    } else {
-        return $resp->code();
-    }
-}
-
 sub response {
     my ($self) = @_;
 
