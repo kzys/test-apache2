@@ -30,11 +30,20 @@ Test::Apache2 - Testing mod_perl handler without httpd (1)
 
 =head1 SYNOPSIS
 
+  use Test::More tests => 1;
   use Test::Apache2;
+  
+  my $server = Test::Apache2::Server->new;
+  $server->location('/myapp', {
+      PerlResponseHandler => 'MyAppHandler',
+  });
+  
+  my $resp = $server->get('/myapp');
+  is($resp->content, 'hello world');
 
 =head1 DESCRIPTION
 
-Test::Apache2 is a test harness of mod_perl handler.
+Test::Apache2 is a test harness of a mod_perl handler.
 
 =head1 AUTHOR
 

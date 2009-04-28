@@ -115,3 +115,13 @@ sub print {
 }
 
 1;
+
+=head1 NAME
+
+Test::Apache2::RequestRec - Pure Perl implementation of Apache2::RequestRec
+
+=head1 SEE ALSO
+
+L<Apache2::RequestRec>
+
+=cut
