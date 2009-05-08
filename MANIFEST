@@ -1,9 +1,18 @@
+Build.PL
 Changes
 lib/Test/Apache2.pm
+lib/Test/Apache2/Override.pm
 lib/Test/Apache2/RequestRec.pm
 lib/Test/Apache2/Server.pm
-Makefile.PL
 MANIFEST			This list of files
+META.yml
+t/content_type.t
 t/FooHandler.pm
 t/header.t
+t/override.t
+t/pod.t
+t/request.t
 t/server.t
+t/status.t
+t/subprocess_env.t
+t/Util.pm
