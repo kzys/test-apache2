@@ -13,10 +13,12 @@ requires:
   perl: 0
 provides:
   Apache2::ServerUtil:
-    file: lib/Test/Apache2.pm
+    file: lib/Test/Apache2/Override.pm
   Test::Apache2:
     file: lib/Test/Apache2.pm
     version: 0.01
+  Test::Apache2::Override:
+    file: lib/Test/Apache2/Override.pm
   Test::Apache2::RequestRec:
     file: lib/Test/Apache2/RequestRec.pm
   Test::Apache2::Server:
