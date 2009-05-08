@@ -3,6 +3,7 @@
 ~$
 ^blib/
 ^\.hg/
+^\.DS_Store
 ^pm_to_blib
 \.gz$
 \.bak$
