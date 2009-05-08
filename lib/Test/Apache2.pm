@@ -26,7 +26,7 @@ __END__
 
 =head1 NAME
 
-Test::Apache2 - Testing mod_perl handler without httpd (1)
+Test::Apache2 - Simple test harness of mod_perl handler
 
 =head1 SYNOPSIS
 
@@ -43,7 +43,10 @@ Test::Apache2 - Testing mod_perl handler without httpd (1)
 
 =head1 DESCRIPTION
 
-Test::Apache2 is a test harness of a mod_perl handler.
+This module provides a simple test harness of mod_perl handler.
+
+The difference between the module and Apache::Test is that
+the former don't spawn an real Apache process.
 
 =head1 AUTHOR
 
@@ -57,3 +60,4 @@ it under the same terms as Perl itself.
 L<Apache::Test>, L<Test::Environment>, L<Apache2::ASP>
 
 =cut
+

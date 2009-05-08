@@ -14,7 +14,7 @@ sub new {
     $self->{handlers} = [];
 
     if (! $self->host) {
-	$self->host('example.com');
+        $self->host('example.com');
     }
 
     return $self;
@@ -49,7 +49,7 @@ sub get {
 
     my $req = Test::Apache2::RequestRec->new({
         method => 'GET', uri => 'http://' . $self->host . $path,
-	headers_in => {}
+        headers_in => {}
     });
     $self->_request($req);
 }
@@ -91,3 +91,34 @@ sub _request {
 }
 
 1;
+__END__
+
+=head1 NAME
+
+Test::Apache2::Server - Facade of Test::Apache2
+
+=head1 DESCRIPTION
+
+This class is "Facade" of Test::Apache2.
+
+=head1 CLASS METHODS
+
+=head2 new(\%args)
+
+Creates a new Test::Apache2::Server object.
+
+=head1 INSTANCE METHODS
+
+=head2 $self->location($path, \%configuration)
+
+Sets a handler on $path.
+
+=head2 $self->get($path)
+
+Requests $path with GET method and returns the HTTP::Response object.
+
+=head2 $self->request($request)
+
+Requests with HTTP::Request object and returns the HTTP::Response object.
+
+=cut

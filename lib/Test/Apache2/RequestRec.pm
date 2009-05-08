@@ -118,7 +118,15 @@ sub print {
 
 =head1 NAME
 
-Test::Apache2::RequestRec - Pure Perl implementation of Apache2::RequestRec
+Test::Apache2::RequestRec - Fake Apache2::RequestRec
+
+=head1 DESCRIPTION
+
+Apache2::RequestRec don't allow you to create an instance manually,
+because the instance created automatically by mod_perl.
+
+So this class provides same interface as Apache2::RequestRec
+except a public constructor and some setters.
 
 =head1 SEE ALSO
 
