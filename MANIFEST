@@ -1,5 +1,4 @@
 Changes
-lib/FakeApache2.pm
 lib/Test/Apache2.pm
 lib/Test/Apache2/RequestRec.pm
 lib/Test/Apache2/Server.pm
