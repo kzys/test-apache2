@@ -6,20 +6,7 @@ use vars qw($VERSION);
 $VERSION = '0.01';
 
 use Test::Apache2::Server;
-
-sub import {
-    {
-        package Apache2::ServerUtil;
-
-        sub server_root {
-            '';
-        }
-
-        sub restart_count {
-            0;
-        }
-    }
-}
+use Test::Apache2::Override;
 
 1;
 __END__
