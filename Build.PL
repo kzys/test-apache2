@@ -18,7 +18,7 @@ Module::Build->new(
     },
 
     meta_add => {
-        no_index => { file => [ qw(Test/Apache2/Override.pm) ] }
+        no_index => { package => [ qw(Apache2::ServerUtil) ] }
     },
 )->create_build_script;
 
