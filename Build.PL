@@ -7,7 +7,8 @@ Module::Build->new(
     license     => 'perl',
 
     requires => {
-        'mod_perl' => 0,
+        'Class::Accessor::Fast' => 0,
+        'APR::Table' => 0,
     },
     build_requires => {
         'Test::More' => 0,
