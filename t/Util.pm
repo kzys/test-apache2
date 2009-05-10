@@ -1,6 +1,8 @@
 package t::Util;
+use strict;
+use warnings;
 use Exporter qw(import);
-@EXPORT = qw(server_with_handler);
+our @EXPORT = qw(server_with_handler);
 
 use Test::Apache2::Server;
 
@@ -18,6 +20,8 @@ sub server_with_handler {
 }
 
 package t::Util::Handler;
+use strict;
+use warnings;
 our $HANDLER;
 
 sub handler {
