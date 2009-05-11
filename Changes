@@ -1,4 +1,8 @@
 Revision history for Perl extension Test::Apache2
 
-0.03  Sat May 9 04:58:44 2009 (JST)
+0.03  Mon May 11 19:01:50 2009 (JST)
+	- Test::Apache2::RequestRec->new takes HTTP::Request instance.
+	- Added "to_response" method to Test::Apache2::RequestRec.
+
+0.02  Sat May 9 04:34:23 2009 (JST)
 	- Initial release.
