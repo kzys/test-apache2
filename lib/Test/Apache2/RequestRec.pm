@@ -137,7 +137,7 @@ sub to_response {
     my ($self) = @_;
     my $result = HTTP::Response->new;
 
-    $result->header('Content-Type', $self->headers_out->get('Content-Type'));
+    $self->headers_out->do(sub { $result->header($_[0], $_[1]); });
     $result->code($self->status);
     $result->content($self->response_body);
 
