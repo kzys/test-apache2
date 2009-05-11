@@ -6,6 +6,7 @@ use base qw(Class::Accessor::Fast);
 use URI;
 use APR::Pool;
 use APR::Table;
+use Scalar::Util;
 
 __PACKAGE__->mk_accessors(
     qw(status response_body uri location unparsed_uri)
@@ -15,6 +16,16 @@ __PACKAGE__->mk_ro_accessors(
 );
 
 sub new {
+    my ($class, @args) = @_;
+
+    if (Scalar::Util::blessed($args[0])) {
+        $class->_new_from_request(@args);
+    } else {
+        $class->_new_from_hash_ref(@args);
+    }
+}
+
+sub _new_from_hash_ref {
     my ($class, @args) = @_;
 
     my $self = $class->SUPER::new(@args);
@@ -32,6 +43,19 @@ sub new {
     $self->{headers_in} = $headers_in;
 
     return $self;
+}
+
+sub _new_from_request {
+    my ($class, $req) = @_;
+
+    my %headers_in = map {
+        $_ => $req->header($_);
+    } $req->header_field_names;
+
+    return $class->new({
+        method => $req->method, uri => $req->uri,
+        headers_in => \%headers_in
+    });
 }
 
 sub get_server_port {
@@ -107,6 +131,17 @@ sub args {
 
 sub set_content_length {
     ;
+}
+
+sub to_response {
+    my ($self) = @_;
+    my $result = HTTP::Response->new;
+
+    $result->header('Content-Type', $self->headers_out->get('Content-Type'));
+    $result->code($self->status);
+    $result->content($self->response_body);
+
+    return $result;
 }
 
 sub print {

@@ -31,17 +31,8 @@ sub location {
 }
 
 sub request {
-    my ($self, $http_request) = @_;
-
-    my %headers_in = map {
-        $_ => $http_request->header($_);
-    } $http_request->header_field_names;
-
-    my $req = Test::Apache2::RequestRec->new({
-        method => $http_request->method, uri => $http_request->uri,
-        headers_in => \%headers_in
-    });
-    $self->_request($req);
+    my ($self, $req) = @_;
+    $self->_request(Test::Apache2::RequestRec->new($req));
 }
 
 sub get {
@@ -83,11 +74,7 @@ sub _request {
         $req->print($buffer);
     }
 
-    my $result = HTTP::Response->new;
-    $result->header('Content-Type', $req->headers_out->get('Content-Type'));
-    $result->code($req->status);
-    $result->content($req->response_body);
-    return $result;
+    return $req->to_response;
 }
 
 1;
