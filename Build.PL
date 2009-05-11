@@ -9,6 +9,7 @@ Module::Build->new(
     requires => {
         'Class::Accessor::Fast' => 0,
         'APR::Table' => 0,
+        'APR::Pool' => 0,
     },
     build_requires => {
         'Test::More' => 0,
