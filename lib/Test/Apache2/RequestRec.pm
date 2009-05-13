@@ -7,6 +7,7 @@ use URI;
 use APR::Pool;
 use APR::Table;
 use Scalar::Util;
+use HTTP::Response;
 
 __PACKAGE__->mk_accessors(
     qw(status response_body uri location unparsed_uri)
