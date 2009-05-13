@@ -1,6 +1,6 @@
 use strict;
 use warnings;
-use Test::More tests => 8;
+use Test::More tests => 7;
 
 use_ok 'Test::Apache2::RequestRec';
 
@@ -16,6 +16,3 @@ is($req->headers_out->get('X-FooBar'), 'One', 'headers_out set/get');
 
 $req->header_out('X-FooBar' => 'Two');
 is($req->headers_out->get('X-FooBar'), 'Two', 'header_out');
-
-$req->headers_out->add('X-Add' => 'added');
-is($req->to_response->header('X-Add'), 'added', 'header_out add/to_response');
