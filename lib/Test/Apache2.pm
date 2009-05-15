@@ -3,7 +3,7 @@ use strict;
 use warnings;
 
 use vars qw($VERSION);
-$VERSION = '0.03';
+$VERSION = '0.04';
 
 use Test::Apache2::Server;
 use Test::Apache2::Override;
@@ -38,6 +38,11 @@ the former don't spawn an real Apache process.
 =head1 AUTHOR
 
 KATO Kazuyoshi E<lt>kzys@8-p.infoE<gt>
+
+This library is free software; you can redistribute it and/or modify
+it under the same terms as Perl itself.
+
+=head1 LICENSE
 
 This library is free software; you can redistribute it and/or modify
 it under the same terms as Perl itself.
