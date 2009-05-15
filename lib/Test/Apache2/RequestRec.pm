@@ -8,12 +8,13 @@ use APR::Pool;
 use APR::Table;
 use Scalar::Util;
 use HTTP::Response;
+use IO::Scalar;
 
 __PACKAGE__->mk_accessors(
     qw(status response_body uri location unparsed_uri)
 );
 __PACKAGE__->mk_ro_accessors(
-    qw(headers_in headers_out err_headers_out method)
+    qw(headers_in headers_out err_headers_out method content)
 );
 
 sub new {
@@ -43,6 +44,8 @@ sub _new_from_hash_ref {
     }
     $self->{headers_in} = $headers_in;
 
+    $self->{request_body} = IO::Scalar->new(\$self->content);
+
     return $self;
 }
 
@@ -55,7 +58,8 @@ sub _new_from_request {
 
     return $class->new({
         method => $req->method, uri => $req->uri,
-        headers_in => \%headers_in
+        headers_in => \%headers_in,
+        content => $req->content,
     });
 }
 
@@ -148,9 +152,53 @@ sub to_response {
     return $result;
 }
 
+# Apache2::RequestIO
+
+sub discard_request_body {
+    my ($self) = @_;
+}
+
 sub print {
-    my ($self, $str) = @_;
-    $self->{response_body} .= $str;
+    my ($self, @args) = @_;
+
+    my $result = 0;
+
+    for (@args) {
+        $self->{response_body} .= $_;
+        $result += length $_;
+    }
+
+    return $result;
+}
+
+sub printf {
+    my ($self, $format, @args) = @_;
+
+    return $self->print(sprintf($format, @args));
+}
+
+sub puts {
+    my ($self, @args) = @_;
+
+    return $self->print(@args);
+}
+
+sub read {
+    my ($self, undef, $len, $offset) = @_;
+    $self->{request_body}->read($_[1], $len, $offset);
+}
+
+sub rflush {
+    my ($self) = @_;
+    $self->{request_body}->flush;
+}
+
+sub sendfile {
+    my ($self, $filename, $len, $offset) = @_;
+}
+
+sub write {
+    my ($self, $buffer, $len, $offset) = @_;
 }
 
 1;
