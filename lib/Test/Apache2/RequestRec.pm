@@ -11,10 +11,10 @@ use HTTP::Response;
 use IO::Scalar;
 
 __PACKAGE__->mk_accessors(
-    qw(status response_body uri location unparsed_uri)
+    qw(status uri location unparsed_uri)
 );
 __PACKAGE__->mk_ro_accessors(
-    qw(headers_in headers_out err_headers_out method content)
+    qw(headers_in headers_out err_headers_out method content response_body)
 );
 
 sub new {
@@ -44,7 +44,8 @@ sub _new_from_hash_ref {
     }
     $self->{headers_in} = $headers_in;
 
-    $self->{request_body} = IO::Scalar->new(\$self->content);
+    $self->{request_body_io} = IO::Scalar->new(\$self->content);
+    $self->{response_body_io} = IO::Scalar->new(\$self->{response_body});
 
     return $self;
 }
@@ -147,6 +148,8 @@ sub to_response {
         return 1;
     });
     $result->code($self->status);
+
+    $self->{response_body_io}->close;
     $result->content($self->response_body);
 
     return $result;
@@ -160,45 +163,48 @@ sub discard_request_body {
 
 sub print {
     my ($self, @args) = @_;
-
-    my $result = 0;
-
-    for (@args) {
-        $self->{response_body} .= $_;
-        $result += length $_;
-    }
-
-    return $result;
+    return $self->{response_body_io}->print(@args);
 }
 
 sub printf {
     my ($self, $format, @args) = @_;
-
     return $self->print(sprintf($format, @args));
 }
 
 sub puts {
     my ($self, @args) = @_;
-
     return $self->print(@args);
 }
 
 sub read {
     my ($self, undef, $len, $offset) = @_;
-    $self->{request_body}->read($_[1], $len, $offset);
+    $self->{request_body_io}->read($_[1], $len, $offset);
 }
 
 sub rflush {
     my ($self) = @_;
-    $self->{request_body}->flush;
+    $self->{request_body_io}->flush;
 }
 
 sub sendfile {
-    my ($self, $filename, $len, $offset) = @_;
+    my ($self, $path, $len, $offset) = @_;
+
+    open(my $file, '<', $path);
+    my $bytes = do {
+        local $/;
+        <$file>;
+    };
+    close($file);
+
+    return $self->write($bytes, $len, $offset);
 }
 
 sub write {
-    my ($self, $buffer, $len, $offset) = @_;
+    my ($self, $bytes, $len, $offset) = @_;
+    if (! $len) {
+        $len = length $bytes;
+    }
+    return $self->{response_body_io}->write($bytes, $len, $offset);
 }
 
 1;
