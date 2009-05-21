@@ -11,7 +11,7 @@ use HTTP::Response;
 use IO::Scalar;
 
 __PACKAGE__->mk_accessors(
-    qw(status uri location unparsed_uri)
+    qw(status location)
 );
 __PACKAGE__->mk_ro_accessors(
     qw(headers_in headers_out err_headers_out method content response_body)
@@ -31,7 +31,10 @@ sub _new_from_hash_ref {
     my ($class, @args) = @_;
 
     my $self = $class->SUPER::new(@args);
-    $self->uri(URI->new($self->uri));
+
+    if (@args) {
+        $self->{_real_uri} = URI->new($args[0]->{uri});
+    }
 
     my $pool = APR::Pool->new;
     map {
@@ -58,20 +61,31 @@ sub _new_from_request {
     } $req->header_field_names;
 
     return $class->new({
-        method => $req->method, uri => $req->uri,
+        method => $req->method,
+        uri => $req->uri,
         headers_in => \%headers_in,
         content => $req->content,
     });
 }
 
+sub uri {
+    my ($self) = @_;
+    $self->{_real_uri}->path;
+}
+
+sub unparsed_uri {
+    my ($self) = @_;
+    $self->{_real_uri}->path_query;
+}
+
 sub get_server_port {
     my ($self) = @_;
-    $self->uri->port;
+    $self->{_real_uri}->port;
 }
 
 sub hostname {
     my ($self) = @_;
-    $self->uri->host;
+    $self->{_real_uri}->host;
 }
 
 sub path_info {
@@ -81,7 +95,7 @@ sub path_info {
 
 sub path {
     my ($self) = @_;
-    $self->uri->path_query;
+    $self->{_real_uri}->path_query;
 }
 
 sub header_in {
@@ -132,7 +146,7 @@ sub dir_config {
 sub args {
     my ($self) = @_;
 
-    return $self->uri->query;
+    return $self->{_real_uri}->query;
 }
 
 sub set_content_length {
