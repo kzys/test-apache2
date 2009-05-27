@@ -63,7 +63,7 @@ sub _request {
     my ($class, $config) = $self->_select($req->path);
     $req->dir_config($config);
 
-    my $buffer;
+    my $buffer = '';
     {
         local *STDOUT;
         open STDOUT, '>', \$buffer;
