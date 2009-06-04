@@ -1,7 +1,7 @@
 package Test::Apache2::RequestRec;
 use strict;
 use warnings;
-use base qw(Class::Accessor::Fast);
+use base qw(Test::Apache2::RequestIO);
 
 use URI;
 use APR::Pool;
@@ -14,7 +14,7 @@ __PACKAGE__->mk_accessors(
     qw(status location)
 );
 __PACKAGE__->mk_ro_accessors(
-    qw(headers_in headers_out err_headers_out method content response_body)
+    qw(headers_in headers_out err_headers_out method)
 );
 
 sub new {
@@ -34,6 +34,8 @@ sub _new_from_hash_ref {
 
     if (@args) {
         $self->{_real_uri} = URI->new($args[0]->{uri});
+    } else {
+        $self->{_real_uri} = URI->new('http://example.com/');
     }
 
     my $pool = APR::Pool->new;
@@ -46,9 +48,6 @@ sub _new_from_hash_ref {
         $headers_in->set($key => $value);
     }
     $self->{headers_in} = $headers_in;
-
-    $self->{request_body_io} = IO::Scalar->new(\$self->content);
-    $self->{response_body_io} = IO::Scalar->new(\$self->{response_body});
 
     if (! defined $self->location) {
         $self->location($self->uri);
@@ -167,65 +166,16 @@ sub to_response {
     });
     $result->code($self->status);
 
+    # TODO: don't access superclass's variable directly
     $self->{response_body_io}->close;
+
     $result->content($self->response_body);
 
     return $result;
 }
 
-# Apache2::RequestIO
-
-sub discard_request_body {
-    my ($self) = @_;
-}
-
-sub print {
-    my ($self, @args) = @_;
-    return $self->{response_body_io}->print(@args);
-}
-
-sub printf {
-    my ($self, $format, @args) = @_;
-    return $self->print(sprintf($format, @args));
-}
-
-sub puts {
-    my ($self, @args) = @_;
-    return $self->print(@args);
-}
-
-sub read {
-    my ($self, undef, $len, $offset) = @_;
-    $self->{request_body_io}->read($_[1], $len, $offset);
-}
-
-sub rflush {
-    my ($self) = @_;
-    $self->{request_body_io}->flush;
-}
-
-sub sendfile {
-    my ($self, $path, $len, $offset) = @_;
-
-    open(my $file, '<', $path);
-    my $bytes = do {
-        local $/;
-        <$file>;
-    };
-    close($file);
-
-    return $self->write($bytes, $len, $offset);
-}
-
-sub write {
-    my ($self, $bytes, $len, $offset) = @_;
-    if (! $len) {
-        $len = length $bytes;
-    }
-    return $self->{response_body_io}->write($bytes, $len, $offset);
-}
-
 1;
+
 
 =head1 NAME
 
