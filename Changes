@@ -1,5 +1,9 @@
 Revision history for Perl extension Test::Apache2
 
+0.05  Thu June 15 18:16:15 2009 (JST)
+	- Fixed uri, unparserd_uri, and location of Test::Apache2::RequestRec.
+	- Fixed "Use of uninitialized value" warning at Test::Apache::Server.
+
 0.04  Fri May 15 17:40:40 2009 (JST)
 	- Module::Build -> Module::Install.
 	- Copied all headers from Test::Apache2::RequestRec to HTTP::Response.
