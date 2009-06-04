@@ -2,7 +2,9 @@ use strict;
 use warnings;
 use Test::More tests => 7;
 
-use_ok 'Test::Apache2::RequestRec';
+BEGIN {
+    use_ok 'Test::Apache2::RequestRec' or die;
+}
 
 my $req = Test::Apache2::RequestRec->new({ headers_in => { 'X-Baz' => 'hello' } });
 isa_ok($req->headers_in, 'APR::Table');

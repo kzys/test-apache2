@@ -3,7 +3,9 @@ use warnings;
 use Test::More tests => 4;
 use t::FooHandler;
 
-use_ok 'Test::Apache2::Server';
+BEGIN {
+    use_ok 'Test::Apache2::Server' or die;
+}
 
 my $server = Test::Apache2::Server->new;
 ok($server, 'new');

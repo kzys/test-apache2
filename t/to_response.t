@@ -2,7 +2,9 @@ use strict;
 use warnings;
 use Test::More tests => 3;
 
-use_ok 'Test::Apache2::RequestRec';
+BEGIN {
+    use_ok 'Test::Apache2::RequestRec' or die;
+}
 
 my $req = Test::Apache2::RequestRec->new;
 $req->headers_out->add('X-One' => 'one');
