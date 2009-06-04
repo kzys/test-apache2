@@ -1,7 +1,7 @@
 package Test::Apache2::RequestRec;
 use strict;
 use warnings;
-use base qw(Test::Apache2::RequestIO);
+use base qw(Test::Apache2::RequestUtil);
 
 use URI;
 use APR::Pool;
@@ -10,7 +10,7 @@ use Scalar::Util;
 use HTTP::Response;
 
 __PACKAGE__->mk_accessors(
-    qw(status location)
+    qw(status)
 );
 __PACKAGE__->mk_ro_accessors(
     qw(headers_in headers_out err_headers_out method)
@@ -127,21 +127,6 @@ sub subprocess_env {
         $self->subprocess_env->get($key);
     } else {
         $self->{subprocess_env};
-    }
-}
-
-sub dir_config {
-    my ($self, $key, $value) = @_;
-
-    if (ref $key eq 'HASH') {
-        $self->{dir_config} = $key;
-    } elsif (defined $value) {
-        $self->{dir_config}->{$key} = $value;
-    } else {
-        my $config = $self->{dir_config};
-	if ($config) {
-	    return $config->{$key};
-	}
     }
 }
 
