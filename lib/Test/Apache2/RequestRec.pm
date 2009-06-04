@@ -8,7 +8,6 @@ use APR::Pool;
 use APR::Table;
 use Scalar::Util;
 use HTTP::Response;
-use IO::Scalar;
 
 __PACKAGE__->mk_accessors(
     qw(status location)
