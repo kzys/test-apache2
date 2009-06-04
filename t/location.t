@@ -1,17 +1,23 @@
 use strict;
 use warnings;
+use Test::More tests => 2;
+use Test::Apache2;
+use HTTP::Request;
+
+my $req = HTTP::Request->new(GET => 'http://example.com/bar');
+
+my $request_rec = Test::Apache2::RequestRec->new($req);
+is($request_rec->location, '/bar', 'RequestRec');
 
 {
     package Handler;
-    use Test::More tests => 1;
 
     sub handler {
         my ($self, $req) = @_;
-        is($req->location, '/foo');
+        Test::More::is($req->location, '/foo', 'Server');
     }
 }
 
-use Test::Apache2::Server;
 my $server = Test::Apache2::Server->new;
 
 $server->location('/foo', {

@@ -50,6 +50,10 @@ sub _new_from_hash_ref {
     $self->{request_body_io} = IO::Scalar->new(\$self->content);
     $self->{response_body_io} = IO::Scalar->new(\$self->{response_body});
 
+    if (! defined $self->location) {
+        $self->location($self->uri);
+    }
+
     return $self;
 }
 
