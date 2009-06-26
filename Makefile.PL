@@ -10,6 +10,7 @@ requires 'mod_perl2' => 0;
 
 test_requires 'Test::More' => 0;
 test_requires 'Test::Pod::Coverage' => 0;
+test_requires 'IO::Scalar' => 0;
 
 no_index package => 'Apache2::ServerUtil';
 
