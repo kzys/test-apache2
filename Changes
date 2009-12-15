@@ -1,6 +1,10 @@
 Revision history for Perl extension Test::Apache2
 
-0.05  Thu June 15 18:16:15 2009 (JST)
+0.05  Tue Dec 15 17:43:49 2009 (JST)
+    - Fixed "handler" method by Dagfinn Ilmari Mannsåker:
+      http://rt.cpan.org/Public/Bug/Display.html?id=50931.
+    - Moved some methods from Test::Apache2::RequestRec to
+      Test::Apache2::RequestIO and Test::Apache2::RequestUtil.
 	- Fixed uri, unparserd_uri, and location of Test::Apache2::RequestRec.
 	- Fixed "Use of uninitialized value" warning at Test::Apache::Server.
 
