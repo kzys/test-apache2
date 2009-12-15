@@ -24,7 +24,7 @@ use strict;
 use warnings;
 our $HANDLER;
 
-sub handler {
+sub handler :method {
     $HANDLER->(@_);
 }
 

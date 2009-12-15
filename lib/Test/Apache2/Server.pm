@@ -6,6 +6,7 @@ __PACKAGE__->mk_accessors(qw(host));
 
 use Test::Apache2::RequestRec;
 use HTTP::Response;
+use attributes ();
 
 sub new {
     my ($class, @args) = @_;
@@ -68,7 +69,13 @@ sub _request {
     {
         local *STDOUT;
         open STDOUT, '>', \$buffer;
-        $class->handler($req);
+        my $handler = $class->can('handler');
+        if (grep { $_ eq 'method' } attributes::get($handler)) {
+            $class->$handler($req);
+        }
+        else {
+            $handler->($req);
+        }
     }
 
     if ($buffer) {
